@@ -39,6 +39,3 @@ function registration_menu(){
     const password = prompt('Enter your password');
 }
 
-function main_menu(){
-    
-}

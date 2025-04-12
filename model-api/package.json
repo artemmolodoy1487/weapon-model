@@ -8,5 +8,9 @@
   "keywords": [],
   "author": "artemlegenda",
   "license": "ISC",
-  "description": "rest service provide to manipulate model and store data"
+  "description": "rest service provide to manipulate model and store data",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^8.13.2"
+  }
 }

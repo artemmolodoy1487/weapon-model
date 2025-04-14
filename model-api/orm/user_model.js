@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -17,6 +18,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         minlength: 4
+    },
+    token: {
+        type: String,
+        unique: true,
+        default: () => crypto.randomBytes(16).toString('hex')
     },
     createdAt: {
         type: Date,

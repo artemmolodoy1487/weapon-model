@@ -104,15 +104,17 @@ const prompts = {
     },
 
     async manageWeapons(weapons) {
+        const weaponChoices = weapons.map((weapon) => ({
+            name: `${weapon.name} (${weapon.type})`,
+            value: weapon._id,
+        }));
+
         return inquirer.prompt([
             {
                 type: 'list',
                 name: 'weaponId',
                 message: 'Выберите оружие для взаимодействия:',
-                choices: weapons.map((weapon) => ({
-                    name: `${weapon.name} (${weapon.type})`,
-                    value: weapon._id,
-                })),
+                choices: [...weaponChoices, new inquirer.Separator(), 'Назад'],
             },
             {
                 type: 'list',
@@ -132,8 +134,38 @@ const prompts = {
                     'Посмотреть состояние оружия',
                     'Назад',
                 ],
+                when: (answers) => answers.weaponId !== 'Назад',
             },
         ]);
+    },
+
+    async promptActionDetails(action) {
+        switch (action) {
+            case 'Зарядить оружие':
+            case 'Купить патроны':
+            case 'Продать патроны':
+                return inquirer.prompt([
+                    {
+                        type: 'input',
+                        name: 'amount',
+                        message: `Введите количество ${action === 'Зарядить оружие' ? 'патронов для зарядки' : action === 'Купить патроны' ? 'патронов для покупки' : 'патронов для продажи'}:`,
+                        validate: (value) => !isNaN(value) && value > 0 || 'Введите корректное число больше 0.',
+                    },
+                ]);
+
+            case 'Выстрелить':
+                return inquirer.prompt([
+                    {
+                        type: 'input',
+                        name: 'amount',
+                        message: 'Введите количество выстрелов:',
+                        validate: (value) => !isNaN(value) && value > 0 || 'Введите корректное число больше 0.',
+                    },
+                ]);
+
+            default:
+                return {};
+        }
     },
 };
 

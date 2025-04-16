@@ -9,10 +9,10 @@ const apiClient = {
         try {
             const response = await axios.post(`${BASE_URL}/register`, userData);
             logger.info('Пользователь успешно зарегистрирован.');
-            return response.data;
+            return { success: true, data: response.data };
         } catch (error) {
             logger.error('Ошибка регистрации:', error.response?.data || error.message);
-            throw new Error(error.response?.data?.error || error.message);
+            return { success: false, error: error.response?.data?.error || error.message };
         }
     },
 
@@ -20,43 +20,62 @@ const apiClient = {
         try {
             const response = await axios.post(`${BASE_URL}/login`, credentials);
             logger.info('Пользователь успешно вошел.');
-            return response.data;
+            return { success: true, data: response.data };
         } catch (error) {
             logger.error('Ошибка входа:', error.response?.data || error.message);
-            throw new Error(error.response?.data?.error || error.message);
+            return { success: false, error: error.response?.data?.error || error.message };
+        }
+    },
+
+    async validateToken(token) {
+        try {
+            const response = await axios.post(`${BASE_URL}/validate-token`, {}, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            logger.info('Токен действителен.');
+            return { success: true, data: response.data };
+        } catch (error) {
+            logger.error('Ошибка валидации токена:', error.response?.data || error.message);
+            return { success: false, error: error.response?.data?.error || error.message };
         }
     },
 
     async createWeapon(token, weaponData) {
         try {
-            const response = await axios.post(`${BASE_URL}/create-weapon`, { token, ...weaponData });
+            const response = await axios.post(`${BASE_URL}/create-weapon`, weaponData, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
             logger.info('Оружие успешно создано.');
-            return response.data;
+            return { success: true, data: response.data };
         } catch (error) {
             logger.error('Ошибка создания оружия:', error.response?.data || error.message);
-            throw new Error(error.response?.data?.error || error.message);
-        }
-    },
-
-    async manageWeapon(token, weaponId, action, payload = {}) {
-        try {
-            const response = await axios.post(`${BASE_URL}/weapon/${weaponId}/action`, { token, action, ...payload });
-            logger.info(`Действие "${action}" выполнено.`);
-            return response.data;
-        } catch (error) {
-            logger.error(`Ошибка выполнения действия "${action}":`, error.response?.data || error.message);
-            throw new Error(error.response?.data?.error || error.message);
+            return { success: false, error: error.response?.data?.error || error.message };
         }
     },
 
     async getWeapons(token) {
         try {
-            const response = await axios.get(`${BASE_URL}/weapons`, { params: { token } });
+            const response = await axios.get(`${BASE_URL}/weapons`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
             logger.info('Оружие успешно получено.');
-            return response.data;
+            return { success: true, data: response.data };
         } catch (error) {
             logger.error('Ошибка получения оружия:', error.response?.data || error.message);
-            throw new Error(error.response?.data?.error || error.message);
+            return { success: false, error: error.response?.data?.error || error.message };
+        }
+    },
+
+    async manageWeapon(token, weaponId, action, payload = {}) {
+        try {
+            const response = await axios.post(`${BASE_URL}/weapon/${weaponId}/action`, { action, ...payload }, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            logger.info(`Действие "${action}" выполнено.`);
+            return { success: true, data: response.data };
+        } catch (error) {
+            logger.error(`Ошибка выполнения действия "${action}":`, error.response?.data || error.message);
+            return { success: false, error: error.response?.data?.error || error.message };
         }
     },
 };

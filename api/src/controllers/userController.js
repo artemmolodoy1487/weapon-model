@@ -1,14 +1,10 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const User = require('../orm/user_schema');
+const User = require('../models/User');
 
-const router = express.Router();
-
-// Регистрация пользователя
-router.post('/register', async (req, res) => {
+exports.registerUser = async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
+        // Валидация входных данных
         if (!username || !email || !password) {
             return res.status(400).json({ error: 'Все поля (username, email, password) обязательны' });
         }
@@ -23,15 +19,16 @@ router.post('/register', async (req, res) => {
 
         res.status(201).json({ message: 'Пользователь успешно зарегистрирован', token: newUser.token });
     } catch (error) {
-        console.error(error);
+        console.error('Ошибка регистрации пользователя:', error.message);
         res.status(500).json({ error: 'Ошибка сервера при регистрации пользователя' });
     }
-});
+};
 
-router.post('/login', async (req, res) => {
+exports.loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        // Валидация входных данных
         if (!email || !password) {
             return res.status(400).json({ error: 'Оба поля (email, password) обязательны' });
         }
@@ -46,18 +43,24 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Неверный пароль' });
         }
 
-        res.status(200).json({ message: 'Успешный вход', token: user.token });
+        // Создание JWT-токена
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        res.status(200).json({
+            message: 'Успешный вход',
+            token,
+        });
     } catch (error) {
-        console.error(error);
+        console.error('Ошибка входа пользователя:', error.message);
         res.status(500).json({ error: 'Ошибка сервера при входе пользователя' });
     }
-});
+};
 
-// Валидация токена
-router.post('/validate-token', async (req, res) => {
+exports.validateToken = async (req, res) => {
     try {
         const { token } = req.body;
 
+        // Валидация токена
         if (!token) {
             return res.status(400).json({ error: 'Токен обязателен' });
         }
@@ -69,20 +72,7 @@ router.post('/validate-token', async (req, res) => {
 
         res.status(200).json({ message: 'Токен действителен', user: { username: user.username, email: user.email } });
     } catch (error) {
-        console.error(error);
+        console.error('Ошибка валидации токена:', error.message);
         res.status(500).json({ error: 'Ошибка сервера при валидации токена' });
     }
-});
-
-// Получение всех пользователей
-router.get('/users', async (req, res) => {
-    try {
-        const users = await User.find({}, '-password');
-        res.status(200).json(users);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Ошибка сервера при получении пользователей' });
-    }
-});
-
-module.exports = router;
+};

@@ -11,17 +11,14 @@ class WeaponClass {
         this.type = data.type;
         this.caliber = data.caliber;
 
-        // Инициализация компонентов оружия
         this.magazine = new Magazine(data.magazineCapacity);
         this.barrel = new Barrel(data.barrelLength || 400);
         this.scope = data.scopeMagnification ? new Scope(data.scopeMagnification) : null;
         this.triggerMechanism = new TriggerMechanism();
         this.ammunition = new Ammunition(data.caliber, data.currentAmmo || 0);
 
-        // Состояние прицеливания
         this.isAiming = data.isAiming;
 
-        // Синхронизация начальных данных
         this.magazine.currentAmmo = data.currentAmmo || 0;
     }
 

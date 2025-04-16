@@ -1,7 +1,7 @@
 class Ammunition {
     constructor(caliber, quantity) {
         this.caliber = caliber;
-        this.quantity = quantity || 0; // Убедитесь, что начальное значение установлено
+        this.quantity = quantity || 0;
     }
 
     useAmmo(amount) {

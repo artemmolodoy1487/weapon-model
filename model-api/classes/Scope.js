@@ -1,6 +1,6 @@
 class Scope {
     constructor(magnification) {
-        this.magnification = magnification; // Увеличение прицела
+        this.magnification = magnification;
     }
 
     aim() {

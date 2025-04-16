@@ -1,7 +1,7 @@
 class Magazine {
     constructor(capacity) {
-        this.capacity = capacity; // Максимальная вместимость магазина
-        this.currentAmmo = 0; // Текущее количество патронов
+        this.capacity = capacity; 
+        this.currentAmmo = 0; 
     }
 
     loadAmmo(amount) {

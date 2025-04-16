@@ -6,7 +6,6 @@ const WeaponClass = require('../classes/WeaponClass');
 
 const router = express.Router();
 
-// Создание нового оружия
 router.post('/create-weapon', async (req, res) => {
     try {
         const { token, name, type, caliber, magazineCapacity, barrelLength, scopeMagnification } = req.body;
@@ -117,12 +116,10 @@ router.post('/weapon/:id/action', async (req, res) => {
     }
 });
 
-// Получение всех оружий пользователя
 router.get('/weapons', async (req, res) => {
     try {
         const { token } = req.query;
 
-        // Проверка токена
         const user = await User.findOne({ token });
         if (!user) {
             return res.status(401).json({ error: 'Неверный токен' });

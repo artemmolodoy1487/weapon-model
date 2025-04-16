@@ -12,14 +12,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        lowercase: true, // Приводим email к нижнему регистру
+        lowercase: true, 
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Введите корректный email']
     },
     password: {
         type: String,
         required: true,
         minlength: 4,
-        select: false // Не возвращаем пароль при запросах
+        select: false 
     },
     token: {
         type: String,
@@ -32,7 +32,6 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-// Хэширование пароля перед сохранением
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
     const salt = await bcrypt.genSalt(10);
@@ -40,7 +39,6 @@ userSchema.pre('save', async function (next) {
     next();
 });
 
-// Метод для проверки пароля
 userSchema.methods.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };

@@ -1,0 +1,36 @@
+@startuml
+
+' Состояния оружия
+state NotLoaded {
+    entry / "Сбросить текущие патроны"
+}
+
+state Loaded {
+    entry / "Зарядить патроны"
+}
+
+state Aiming {
+    entry / "Начать прицеливание"
+}
+
+state Shooting {
+    entry / "Произвести выстрел"
+}
+
+state SafeStorage {
+    entry / "Поместить на хранение"
+}
+
+' Начальное состояние
+[*] --> NotLoaded : "Инициализация оружия"
+
+' Переходы между состояниями
+NotLoaded --> Loaded : "Зарядить оружие"
+Loaded --> Aiming : "Начать прицеливание"
+Aiming --> Shooting : "Выстрелить"
+Shooting --> Loaded : "Продолжить стрельбу"
+Loaded --> NotLoaded : "Разрядить оружие"
+NotLoaded --> SafeStorage : "Поместить на хранение"
+SafeStorage --> NotLoaded : "Извлечь из хранения"
+
+@enduml

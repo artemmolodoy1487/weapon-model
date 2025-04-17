@@ -1,0 +1,77 @@
+@startuml
+' Класс WeaponClass
+class WeaponClass {
+    - id: String
+    - name: String
+    - type: String
+    - caliber: String
+    - magazine: Magazine
+    - barrel: Barrel
+    - scope: Scope
+    - triggerMechanism: TriggerMechanism
+    - ammunition: Ammunition
+    - isAiming: Boolean
+    --
+    + syncWithDatabase(weaponData): WeaponClass
+    + getState(): Object
+    + startAiming(): Object
+    + stopAiming(): Object
+    + getAccuracy(): Object
+    + loadAmmo(amount): Object
+    + unloadAmmo(): Object
+    + shoot(): Object
+    + maintenance(): Object
+    + safeStorage(): Object
+    + buyAmmo(amount): Object
+    + sellAmmo(amount): Object
+}
+
+' Класс Magazine
+class Magazine {
+    - capacity: Number
+    - currentAmmo: Number
+    --
+    + getState(): Object
+    + hasAmmo(): Boolean
+    + loadAmmo(amount): Object
+    + unloadAmmo(): Object
+    + shoot(): Object
+}
+
+' Класс Barrel
+class Barrel {
+    - length: Number
+    --
+    + getAccuracy(): Number
+}
+
+' Класс Scope
+class Scope {
+    - magnification: Number
+    --
+    + aim(): Object
+}
+
+' Класс TriggerMechanism
+class TriggerMechanism {
+    + pullTrigger(): Object
+}
+
+' Класс Ammunition
+class Ammunition {
+    - caliber: String
+    - quantity: Number
+    --
+    + getState(): Object
+    + useAmmo(amount): Object
+    + buyAmmo(amount): Object
+    + sellAmmo(amount): Object
+}
+
+' Связи между классами
+WeaponClass *-- Magazine : содержит
+WeaponClass *-- Barrel : содержит
+WeaponClass *-- Scope : содержит
+WeaponClass *-- TriggerMechanism : содержит
+WeaponClass *-- Ammunition : содержит
+@enduml

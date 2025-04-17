@@ -76,6 +76,9 @@ class WeaponClass {
     }
 
     loadAmmo(amount) {
+        if(this.ammunition.getState() < amount){
+            return { message: 'Не достаточно патронов' };
+        }
         return this.magazine.loadAmmo(amount);
     }
 
@@ -94,6 +97,9 @@ class WeaponClass {
     }
 
     maintenance() {
+        this.ammunition.buyAmmo(100);
+        this.unloadAmmo(this.magazine.currentAmmo);
+        this.stopAiming();
         return { message: `Техническое обслуживание проведено для оружия ${this.name}` };
     }
 

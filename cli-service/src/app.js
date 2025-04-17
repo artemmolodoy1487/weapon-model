@@ -11,7 +11,6 @@ async function main() {
         'Разрядить оружие': 'unload',
         'Начать прицеливаться': 'startAiming',
         'Перестать прицеливаться': 'stopAiming',
-        'Техническое обслуживание': 'maintenance',
         'Безопасное хранение': 'safeStorage',
         'Купить патроны': 'buyAmmo',
         'Продать патроны': 'sellAmmo',

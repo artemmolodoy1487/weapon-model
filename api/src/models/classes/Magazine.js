@@ -1,7 +1,18 @@
 class Magazine {
     constructor(capacity) {
-        this.capacity = capacity; 
-        this.currentAmmo = 0; 
+        this.capacity = capacity;
+        this.currentAmmo = 0;
+    }
+
+    getState() {
+        return {
+            capacity: this.capacity,
+            currentAmmo: this.currentAmmo,
+        };
+    }
+
+    hasAmmo() {
+        return this.currentAmmo > 0;
     }
 
     loadAmmo(amount) {
@@ -22,7 +33,7 @@ class Magazine {
     }
 
     shoot() {
-        if (this.currentAmmo <= 0) {
+        if (!this.hasAmmo()) {
             return { error: 'Нет патронов для стрельбы' };
         }
         this.currentAmmo -= 1;

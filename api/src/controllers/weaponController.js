@@ -66,6 +66,7 @@ exports.manageWeapon = async (req, res) => {
                 break;
             case 'maintenance':
                 result = weaponInstance.maintenance();
+                weaponInstance.syncWithDatabase(weaponData);
                 break;
             case 'safeStorage':
                 result = weaponInstance.safeStorage();
